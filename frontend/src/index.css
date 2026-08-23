@@ -1,0 +1,113 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.4);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(156, 163, 175, 0.6);
+}
+
+/* Glassmorphism helpers */
+.glass {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.dark .glass {
+  background: rgba(15, 23, 42, 0.8);
+}
+
+/* ============================================================
+   Tagline intro splash — animated brand intro shown once per
+   browser session before the app opens.
+   ============================================================ */
+@keyframes pp-pop-in {
+  0%   { opacity: 0; transform: scale(0.6) translateY(10px); }
+  60%  { opacity: 1; transform: scale(1.08); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes pp-fade-up {
+  0%   { opacity: 0; transform: translateY(18px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pp-fade-out {
+  from { opacity: 1; }
+  to   { opacity: 0; visibility: hidden; }
+}
+
+@keyframes pp-grow-line {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+.pp-intro-pop       { animation: pp-pop-in 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+.pp-intro-line1     { animation: pp-fade-up 0.6s ease-out 0.35s both; }
+.pp-intro-line2     { animation: pp-fade-up 0.6s ease-out 0.70s both; }
+.pp-intro-underline { animation: pp-grow-line 0.8s ease-out 1.05s both; transform-origin: center; }
+.pp-intro-leaving   { animation: pp-fade-out 0.45s ease forwards; }
+
+/* Respect users who prefer reduced motion: reveal instantly, no movement. */
+@media (prefers-reduced-motion: reduce) {
+  .pp-intro-pop,
+  .pp-intro-line1,
+  .pp-intro-line2,
+  .pp-intro-underline {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* ============================================================
+   Toast notifications (admin panel + shared). Slide in from the
+   right, then fade/slide out when dismissed.
+   ============================================================ */
+@keyframes pp-toast-in {
+  from { opacity: 0; transform: translateX(24px) translateY(-4px); }
+  to   { opacity: 1; transform: translateX(0) translateY(0); }
+}
+
+@keyframes pp-toast-out {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(24px); }
+}
+
+.pp-toast-in  { animation: pp-toast-in 0.28s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+.pp-toast-out { animation: pp-toast-out 0.25s ease forwards; }
+
+@keyframes pp-fade-in-fast {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.pp-fade-in { animation: pp-fade-in-fast 0.3s ease-out both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .pp-toast-in,
+  .pp-toast-out,
+  .pp-fade-in {
+    animation: none !important;
+  }
+}
