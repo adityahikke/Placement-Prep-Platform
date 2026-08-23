@@ -6,10 +6,9 @@ spring:
     name: placementprep-backend
 
   datasource:
-    url: ${DATABASE_URL}
-    username: ${DATABASE_USERNAME}
-    password: ${DATABASE_PASSWORD}
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DATABASE_URL:jdbc:h2:file:./data/placementprep;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=MySQL}
+    username: ${DATABASE_USERNAME:sa}
+    password: ${DATABASE_PASSWORD:}
 
   jpa:
     hibernate:
@@ -31,11 +30,11 @@ spring:
 
 app:
   jwt:
-    secret: ${JWT_SECRET}
+    secret: ${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970337336763979244226452948404D6351}
     expiration-ms: 86400000
 
   google:
-    client-id: ${GOOGLE_CLIENT_ID}
+    client-id: ${GOOGLE_CLIENT_ID:821144344369-52qf8tvtmf44l8ejmkdstoktco2bcqe8.apps.googleusercontent.com}
 
 springdoc:
   api-docs:
