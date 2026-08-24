@@ -16,22 +16,11 @@ RUN npm install
 COPY frontend/ ./
 RUN npm run build
 
-# Stage 2: Serve using Nginx Alpine with dynamic $PORT support
+# Stage 2: Serve using Nginx Alpine
 FROM nginx:alpine
 COPY --from=build /app/dist /usr/share/nginx/html
+COPY frontend/nginx.conf /etc/nginx/conf.d/default.conf
 
-# Nginx Alpine automatically substitutes environment variables in /etc/nginx/templates/*.template
-RUN mkdir -p /etc/nginx/templates
-RUN echo 'server { \
-    listen ${PORT}; \
-    location / { \
-        root /usr/share/nginx/html; \
-        index index.html index.htm; \
-        try_files $$uri $$uri/ /index.html; \
-    } \
-}' > /etc/nginx/templates/default.conf.template
-
-ENV PORT=80
 EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]
