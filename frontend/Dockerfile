@@ -8,10 +8,12 @@ ARG VITE_GOOGLE_CLIENT_ID
 ENV VITE_API_BASE_URL=${VITE_API_BASE_URL}
 ENV VITE_GOOGLE_CLIENT_ID=${VITE_GOOGLE_CLIENT_ID}
 
-COPY package*.json ./
-RUN npm ci
+# Copy package files from frontend directory (root build context)
+COPY frontend/package*.json ./
+RUN npm install
 
-COPY . .
+# Copy source code and build production bundle
+COPY frontend/ ./
 RUN npm run build
 
 # Stage 2: Serve using Nginx Alpine with dynamic $PORT support
