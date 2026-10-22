@@ -1,325 +1,436 @@
-# ?? PlacementPrep Platform
+# üéì PlacementPrep Platform
 
-A full-stack web application designed to help students prepare for campus placements. It covers aptitude tests, DSA problem tracking, CS fundamentals, and provides an admin panel to manage content and monitor student progress.
+[![Java 21](https://img.shields.io/badge/Java-21-orange.svg?style=flat&logo=openjdk)](https://www.oracle.com/java/)
+[![Spring Boot 3](https://img.shields.io/badge/Spring%20Boot-3.4.2-brightgreen.svg?style=flat&logo=springboot)](https://spring.io/projects/spring-boot)
+[![React 18](https://img.shields.io/badge/React-18.3.1-blue.svg?style=flat&logo=react)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite-6.1.0-646CFF.svg?style=flat&logo=vite)](https://vitejs.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-3.4.17-38B2AC.svg?style=flat&logo=tailwind-css)](https://tailwindcss.com/)
+[![PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL%20%2F%20Supabase-336791.svg?style=flat&logo=postgresql)](https://supabase.com/)
+[![Deployment - Vercel](https://img.shields.io/badge/Frontend-Vercel-black.svg?style=flat&logo=vercel)](https://vercel.com/)
+[![Deployment - Render](https://img.shields.io/badge/Backend-Render-46E3B7.svg?style=flat&logo=render)](https://render.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
----
+A modern, production-grade full-stack platform designed to help engineering students prepare effectively for campus placements, technical assessments, and software engineering interviews. 
 
-## ?? Live Demo
-
-| Service | URL |
-|---------|-----|
-| Frontend | [Deployed on Vercel](https://your-app.vercel.app) |
-| Backend API | [Deployed on Render](https://your-api.onrender.com) |
-| Swagger UI | `https://your-api.onrender.com/swagger-ui.html` |
-
----
-
-## ?? Tech Stack
-
-### Frontend
-| Technology | Purpose |
-|------------|---------|
-| React 18 | UI Framework |
-| Vite | Build Tool |
-| React Router DOM v6 | Client-side Routing |
-| Tailwind CSS | Styling |
-| Axios | HTTP Client |
-| Lucide React | Icons |
-| Canvas Confetti | Animations |
-
-### Backend
-| Technology | Purpose |
-|------------|---------|
-| Java 21 | Language |
-| Spring Boot 3 | Application Framework |
-| Spring Security + JWT | Authentication and Authorization |
-| Spring Data JPA / Hibernate | ORM and Database Access |
-| PostgreSQL | Production Database |
-| Supabase | Managed PostgreSQL (Production) |
-| SpringDoc OpenAPI | Swagger API Documentation |
-| Apache POI | Excel file parsing for Bulk Upload |
-| Google OAuth2 | Social Login |
+The platform features timed topic-based tests, comprehensive CS fundamentals learning paths, LeetCode-style DSA problem tracking, progress analytics, and a powerful administrative control panel equipped with bulk Excel question imports and dynamic curriculum management.
 
 ---
 
-## ? Features
+## üåê Live Deployments & Architecture
 
-### ????? Student Features
-- **Register / Login** ó Email and password or Google OAuth2
-- **Dashboard** ó Overview of tests taken, DSA progress, study streaks
-- **Aptitude Tests** ó Subject-wise MCQ tests with timer and auto-submit
-- **Test History** ó View all past test attempts with scores and timestamps
-- **Test Results** ó Detailed result page with correct/wrong answer review
-- **CS Fundamentals** ó Chapter-based study material for OS, DBMS, CN, OOPs
-- **DSA Tracker** ó Track LeetCode-style problems by topic and difficulty
-- **Progress Analytics** ó Charts showing performance trends over time
+The application is architected as a decoupled, modern cloud-native system:
 
-### ??? Admin Features
-- **Admin Dashboard** ó Summary stats (students, questions, test attempts)
-- **Question Bank** ó Add, edit, delete MCQ questions with bulk Excel upload
-- **Curriculum Manager** ó Manage Subjects ? Chapters ? Sections hierarchy
-- **DSA Problems Manager** ó Add/edit DSA problems with topic/difficulty tags
-- **Student Management** ó View all registered students
-- **Student Detail View** ó Inspect individual student test history and progress
+| Layer | Hosting Provider | Default Service URL | Description |
+|---|---|---|---|
+| **Frontend** | [Vercel](https://vercel.com) | `https://placement-prep-platform.vercel.app` | React 18 SPA with global edge delivery & instant cache invalidation |
+| **Backend REST API** | [Render](https://render.com) | `https://placementprep-backend.onrender.com` | Dockerized Spring Boot 3 service with automatic zero-downtime deploys |
+| **Database** | [Supabase](https://supabase.com) | `aws-0-[region].pooler.supabase.com:6543` | Managed PostgreSQL with connection pooling & automated failover |
+| **API Documentation** | Swagger / OpenAPI 3 | `https://placementprep-backend.onrender.com/swagger-ui.html` | Interactive REST API testing interface |
 
----
+```mermaid
+flowchart TD
+    subgraph Client ["Client Layer"]
+        Student["üë®‚Äçüéì Student"]
+        Admin["üõ°Ô∏è Admin"]
+    end
 
-## ??? Project Structure
+    subgraph FrontendPlatform ["Frontend Deployment (Vercel)"]
+        VercelCDN["Vercel Global Edge CDN"]
+        ReactSPA["React 18 + Vite SPA<br/>(Tailwind CSS, Lucide Icons, Context API)"]
+    end
 
-```
-Placement-Prep-Platform/
-+-- backend/                        # Spring Boot Java application
-¶   +-- src/
-¶   ¶   +-- main/
-¶   ¶       +-- java/com/placementprep/
-¶   ¶       ¶   +-- config/         # CORS, Security, Swagger config
-¶   ¶       ¶   +-- controller/     # REST API controllers
-¶   ¶       ¶   +-- dto/            # Data Transfer Objects
-¶   ¶       ¶   +-- entity/         # JPA Entity classes
-¶   ¶       ¶   +-- exception/      # Global exception handling
-¶   ¶       ¶   +-- repository/     # Spring Data JPA repositories
-¶   ¶       ¶   +-- security/       # JWT + Google token verifier
-¶   ¶       ¶   +-- service/        # Business logic services
-¶   ¶       +-- resources/
-¶   ¶           +-- application.yml
-¶   +-- pom.xml
-¶
-+-- frontend/                       # React + Vite application
-¶   +-- src/
-¶   ¶   +-- api/                    # Axios client and API calls
-¶   ¶   +-- components/             # Reusable UI components
-¶   ¶   +-- context/                # React context (Auth)
-¶   ¶   +-- hooks/                  # Custom React hooks
-¶   ¶   +-- pages/
-¶   ¶   ¶   +-- admin/              # Admin panel pages
-¶   ¶   ¶   +-- Dashboard.jsx
-¶   ¶   ¶   +-- Aptitude.jsx
-¶   ¶   ¶   +-- DsaTracker.jsx
-¶   ¶   ¶   +-- CsFundamentals.jsx
-¶   ¶   ¶   +-- ProgressAnalytics.jsx
-¶   ¶   ¶   +-- TestHistory.jsx
-¶   ¶   ¶   +-- TestEnvironment.jsx
-¶   ¶   ¶   +-- TestResult.jsx
-¶   ¶   +-- routes/
-¶   ¶   +-- App.jsx
-¶   ¶   +-- main.jsx
-¶   +-- package.json
-¶   +-- vercel.json
-¶
-+-- README.md
+    subgraph BackendPlatform ["Backend Deployment (Render)"]
+        RenderService["Render Web Service (Docker Container)"]
+        SpringBoot["Spring Boot 3 REST API<br/>(Spring Security, JWT Filter, Hibernate)"]
+    end
+
+    subgraph DatabasePlatform ["Cloud Database (Supabase)"]
+        SupabaseDB[("PostgreSQL 15+<br/>(Connection Pooling / Port 6543)")]
+    end
+
+    subgraph ExternalAuth ["Identity Provider"]
+        GoogleOAuth["Google Cloud OAuth 2.0"]
+    end
+
+    Student -->|"Access App"| VercelCDN
+    Admin -->|"Access Admin Panel"| VercelCDN
+    VercelCDN --> ReactSPA
+    ReactSPA -->|"REST Requests + Bearer JWT"| RenderService
+    RenderService --> SpringBoot
+    SpringBoot -->|"HikariCP / JDBC"| SupabaseDB
+    ReactSPA -.->|"Google One-Tap / Sign-In"| GoogleOAuth
+    SpringBoot -.->|"Verify Google ID Token"| GoogleOAuth
 ```
 
 ---
 
-## ?? Local Development Setup
+## ‚ö° Core Features
+
+### üë®‚Äçüéì Student Ecosystem
+- **Flexible Authentication**: Sign up with email and password or perform 1-click login using **Google OAuth 2.0**.
+- **Interactive Student Dashboard**:
+  - Live counts of completed tests, total questions answered, and overall average score.
+  - Active study streak counter to encourage consistent daily practice.
+  - Quick launcher for recent test activities and recommended chapters.
+- **Aptitude & Technical Assessments**:
+  - **Timed Tests**: 5-minute countdown timer with auto-submit safeguard upon expiration.
+  - **Weighted Difficulty**: Automatically pulls 10 balanced questions (4 Easy, 4 Medium, 2 Hard) per chapter.
+  - **Custom Practice Mode**: Filter randomized tests by Section, Difficulty, and Question Count.
+  - **Question Palette**: Interactive question grid with status flags (Answered vs Unanswered).
+- **In-Depth Results & Answer Key**:
+  - Immediate score tally and percentage breakdown.
+  - Side-by-side review showing student's chosen option, the verified correct option, and comprehensive step-by-step explanations.
+- **Historical Records**: Paginated log of all past test attempts with scores, completion status, and review shortcuts.
+- **Core CS Fundamentals Modules**: Chapter-organized study guides covering foundational concepts:
+  - Operating Systems (OS)
+  - Database Management Systems (DBMS)
+  - Computer Networks (CN)
+  - Object-Oriented Programming (OOPs)
+- **DSA Problem Tracker**:
+  - Curated LeetCode-style problem list sorted by topic (Arrays, Strings, Linked Lists, Trees, Graphs, DP).
+  - One-click links directly to external problem statements.
+  - Multi-state progress toggling (`NOT_STARTED`, `ATTEMPTED`, `SOLVED`).
+- **Progress Analytics**: Visual mastery indicators tracking competencies across subjects and difficulty tiers.
+- **Dark & Light Mode**: Built-in theme toggle with local storage persistence and reduced-motion support.
+
+---
+
+### üõ°Ô∏è Administrative Management Suite (`ROLE_ADMIN`)
+- **Admin Dashboard**: System metrics including registered student counts, question bank size, total assessments taken, and subject coverage.
+- **Student Management Directory**:
+  - Searchable, paginated student roster with registration timestamps and college affiliations.
+  - Read-only student inspection detailing specific student test records and average accuracy.
+- **Question Bank Control**:
+  - Full CRUD capabilities: create, preview, edit, and delete questions with multi-choice options and explanations.
+  - **Bulk Excel Import (`.xlsx`)**: Upload hundreds of questions at once with automated schema validation and pre-commit preview table.
+  - Downloadable Excel template ensuring zero formatting errors.
+- **Curriculum Hierarchy Manager**: Manage *Sections (Aptitude, CS Fundamentals) ‚ûî Subjects ‚ûî Chapters*.
+- **DSA Problem Bank**: Add, modify, or tag new algorithmic problems.
+
+---
+
+## üõ†Ô∏è Technology Stack
+
+| Domain | Technology | Details |
+|---|---|---|
+| **Frontend Framework** | React 18.3 | Modern functional components with Hooks and Context API |
+| **Frontend Tooling** | Vite 6.1 | Ultra-fast HMR and optimized production bundling |
+| **Styling & Icons** | Tailwind CSS 3.4 | Utility-first CSS, dark mode support, and Lucide React icons |
+| **Client Routing** | React Router DOM 6.29 | Client-side routing with role-guarded routes (`StudentRoute`, `AdminRoute`) |
+| **HTTP Client** | Axios 1.7 | Interceptors for automated JWT injection and 401 token handling |
+| **Backend Framework** | Spring Boot 3.4.2 | Enterprise Java REST API framework running on Java 21 |
+| **Security & Auth** | Spring Security + JJWT 0.12 | Stateless token-based security, BCrypt hashing, Google OAuth token verification |
+| **Persistence / ORM** | Spring Data JPA / Hibernate 6 | Automated DDL migrations and type-safe query repositories |
+| **Data Processing** | Apache POI 5.2.5 | Excel spreadsheet ingestion and parsing for bulk question bank imports |
+| **Database** | PostgreSQL | Hosted on **Supabase** (with connection pooling) |
+| **API Documentation** | SpringDoc OpenAPI 2.8 | Interactive Swagger UI available at `/swagger-ui.html` |
+| **Containerization** | Docker | Multi-stage Alpine container (`temurin:21-jre-alpine`) |
+
+---
+
+## üóÑÔ∏è Database Schema & Entities
+
+The platform leverages JPA entities with automated schema evolution (`ddl-auto: update`).
+
+| Entity | Purpose | Key Columns |
+|---|---|---|
+| `users` | Students & Administrators | `id`, `name`, `email`, `password`, `role` (`ROLE_STUDENT`, `ROLE_ADMIN`), `college`, `branch`, `auth_provider` |
+| `sections` | Top-level domains | `id`, `name` (e.g., Aptitude, CS Fundamentals), `code`, `icon`, `description` |
+| `subjects` | Subjects under sections | `id`, `name` (e.g., Quantitative Aptitude, OS, DBMS), `section_id` |
+| `chapters` | Chapters under subjects | `id`, `title`, `description`, `subject_id` |
+| `questions` | MCQ items | `id`, `question_text`, `options` (JSON array), `correct_answer`, `explanation`, `difficulty`, `chapter_id` |
+| `test_attempts` | Test sessions | `id`, `user_id`, `chapter_id`, `score`, `total_questions`, `status`, `started_at`, `completed_at` |
+| `test_answers` | Question choices in a test | `id`, `test_attempt_id`, `question_id`, `selected_answer`, `is_correct` |
+| `dsa_problems` | Problem repository | `id`, `title`, `topic`, `difficulty`, `leetcode_url` |
+| `user_dsa_progress` | Student problem status | `id`, `user_id`, `problem_id`, `status` (`NOT_STARTED`, `ATTEMPTED`, `SOLVED`) |
+
+---
+
+## üîë Default Seeded Credentials
+
+When connecting to an empty database, `DataInitializer` and `CurriculumSeeder` automatically populate default admin and student users, sample curriculum subjects, questions, and DSA problems:
+
+| Account Type | Email | Password | Accessible Features |
+|---|---|---|---|
+| **Administrator** | `admin@placementprep.com` | `admin123` | Admin Dashboard, Student Directory, Question Bank, Curriculum Editor |
+| **Student (Demo)** | `student@placementprep.com` | `student123` | Student Dashboard, Timed Tests, CS Modules, DSA Tracker, Analytics |
+
+---
+
+## üöÄ Deployment Guide
+
+This project is tailored for frictionless deployment with **Vercel** (Frontend), **Render** (Backend), and **Supabase** (PostgreSQL Database).
+
+### 1. Database Setup ‚ûî Supabase
+
+1. Navigate to [Supabase](https://supabase.com) and create a new project.
+2. Under **Project Settings** ‚ûî **Database**, find the **Connection string** section.
+3. Select the **JDBC** or **URI** tab.
+   - **Transaction / Session Pooler URL (Recommended for Render)**:
+     ```
+     jdbc:postgresql://aws-0-[REGION].pooler.supabase.com:6543/postgres?sslmode=require
+     ```
+   - **Direct Connection URL**:
+     ```
+     jdbc:postgresql://db.[PROJECT_REF].supabase.co:5432/postgres?sslmode=require
+     ```
+4. Note your database password and username (`postgres` or `postgres.[PROJECT_REF]`).
+5. On the first startup of your Spring Boot backend, Hibernate will create all required tables automatically.
+
+---
+
+### 2. Backend Deployment ‚ûî Render
+
+You can deploy the Spring Boot backend on Render using the included multi-stage `Dockerfile`:
+
+1. Sign in to [Render](https://render.com) and click **New +** ‚ûî **Web Service**.
+2. Connect your GitHub repository: `adityahikke/Placement-Prep-Platform`.
+3. Fill in the service configuration:
+   - **Name**: `placementprep-backend`
+   - **Region**: Select the region closest to your Supabase instance.
+   - **Environment**: `Docker`
+   - **Dockerfile Path**: `./Dockerfile`
+   - **Docker Context**: `.`
+4. In the **Environment Variables** section, add:
+
+| Environment Variable | Value / Format | Explanation |
+|---|---|---|
+| `SPRING_DATASOURCE_URL` | `jdbc:postgresql://aws-0-xx.pooler.supabase.com:6543/postgres?sslmode=require` | Supabase JDBC URL |
+| `SPRING_DATASOURCE_USERNAME` | `postgres.your_supabase_ref` | Supabase DB username |
+| `SPRING_DATASOURCE_PASSWORD` | `YourSupabasePassword` | Supabase DB password |
+| `JWT_SECRET` | `404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970` | 64+ char secret key |
+| `GOOGLE_CLIENT_ID` | `your-google-oauth-client-id.apps.googleusercontent.com` | Optional: For Google Sign-in |
+| `PORT` | `8080` | Internal application port |
+
+5. Under **Advanced**, configure the Health Check Path:
+   - **Health Check Path**: `/api/health`
+6. Click **Deploy Web Service**. Once deployed, Render will provide your public backend URL (e.g., `https://placementprep-backend.onrender.com`).
+
+> **Tip for Render Free Tier**: The `Dockerfile` includes JVM tuning flags (`-Xms256m -Xmx384m -XX:+UseG1GC`) to ensure smooth execution within the 512MB RAM free tier limit.
+
+---
+
+### 3. Frontend Deployment ‚ûî Vercel
+
+1. Sign in to [Vercel](https://vercel.com) and click **Add New...** ‚ûî **Project**.
+2. Import the `Placement-Prep-Platform` repository.
+3. Configure the project settings:
+   - **Framework Preset**: `Vite`
+   - **Root Directory**: `frontend`
+   - **Build Command**: `npm run build`
+   - **Output Directory**: `dist`
+4. Add the following **Environment Variables**:
+
+| Variable | Example Value | Description |
+|---|---|---|
+| `VITE_API_BASE_URL` | `https://placementprep-backend.onrender.com` | URL of your deployed Render backend (omit trailing slash) |
+| `VITE_GOOGLE_CLIENT_ID` | `your-client-id.apps.googleusercontent.com` | Google OAuth Web Client ID |
+
+5. Click **Deploy**. Vercel will build and host your frontend globally with automatic routing rewrites (`vercel.json` and `public/_redirects`).
+
+---
+
+## üíª Local Development Setup
 
 ### Prerequisites
-- Java 21+
-- Maven 3.9+
-- Node.js 18+
-- PostgreSQL (local) **or** a Supabase project URL
-
----
+- **JDK 21** installed and configured in `PATH`
+- **Maven 3.9+**
+- **Node.js 18+** and **npm**
+- **PostgreSQL** installed locally OR a free Supabase cloud instance
 
 ### 1. Clone the Repository
-
 ```bash
-git clone https://github.com/adityahikke/placement-prep-platform.git
-cd placement-prep-platform
+git clone https://github.com/adityahikke/Placement-Prep-Platform.git
+cd Placement-Prep-Platform
 ```
-
----
 
 ### 2. Backend Setup
-
-Set the following environment variables (or create an `.env` file and export them):
-
-```env
-SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/placementprep
-SPRING_DATASOURCE_USERNAME=postgres
-SPRING_DATASOURCE_PASSWORD=yourpassword
-JWT_SECRET=your_jwt_secret_here
-GOOGLE_CLIENT_ID=your_google_oauth_client_id
-```
-
-> **Using Supabase?** Replace `SPRING_DATASOURCE_URL` with your Supabase JDBC URL:
-> `jdbc:postgresql://aws-0-ap-northeast-1.pooler.supabase.com:6543/postgres?user=postgres.xxxx&password=xxxx`
-
-Run the backend:
+Set environment variables or edit `backend/src/main/resources/application.yml`:
 
 ```bash
 cd backend
+
+# On Linux/macOS:
+export SPRING_DATASOURCE_URL="jdbc:postgresql://localhost:5432/placementprep"
+export SPRING_DATASOURCE_USERNAME="postgres"
+export SPRING_DATASOURCE_PASSWORD="your_password"
+export JWT_SECRET="404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970"
+
+# On Windows PowerShell:
+$env:SPRING_DATASOURCE_URL="jdbc:postgresql://localhost:5432/placementprep"
+$env:SPRING_DATASOURCE_USERNAME="postgres"
+$env:SPRING_DATASOURCE_PASSWORD="your_password"
+$env:JWT_SECRET="404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970"
+
+# Run Spring Boot application
 mvn spring-boot:run
 ```
 
-- API runs at: `http://localhost:8080`
-- Swagger UI: `http://localhost:8080/swagger-ui.html`
-
----
+- Backend server: `http://localhost:8080`
+- Swagger UI docs: `http://localhost:8080/swagger-ui.html`
+- Health check: `http://localhost:8080/api/health`
 
 ### 3. Frontend Setup
-
-Create `frontend/.env`:
-
-```env
-VITE_API_BASE_URL=http://localhost:8080
-VITE_GOOGLE_CLIENT_ID=your_google_oauth_client_id
-```
-
-Install and run:
+In a new terminal:
 
 ```bash
 cd frontend
+
+# Install packages
 npm install
+
+# Start Vite dev server
 npm run dev
 ```
 
-Frontend runs at: `http://localhost:5173`
+- Open your browser at: `http://localhost:5173`
 
 ---
 
-## ?? Deployment Guide
+## üì° REST API Reference
 
-### Frontend ? Vercel
+All protected endpoints require an `Authorization: Bearer <JWT>` header.
 
-1. Push your repository to GitHub.
-2. Go to [vercel.com](https://vercel.com) ? **New Project** ? Import GitHub repo.
-3. Set **Root Directory** to `frontend`.
-4. Add Environment Variables:
-   - `VITE_API_BASE_URL` ? your Render backend URL (e.g., `https://your-api.onrender.com`)
-   - `VITE_GOOGLE_CLIENT_ID` ? your Google OAuth client ID
-5. Click **Deploy**.
+### üîê Authentication (`/api/auth`)
+| Method | Endpoint | Access | Description |
+|---|---|---|---|
+| `POST` | `/api/auth/register` | Public | Register a new student account |
+| `POST` | `/api/auth/login` | Public | Authenticate student/admin and receive JWT |
+| `POST` | `/api/auth/google` | Public | Sign in / register via Google ID token |
+| `GET` | `/api/auth/me` | Authenticated | Fetch active user profile and role |
 
----
+### üìö Content & Curriculum (`/api`)
+| Method | Endpoint | Access | Description |
+|---|---|---|---|
+| `GET` | `/api/sections` | Public | List all curriculum sections (Aptitude, CS, DSA) |
+| `GET` | `/api/sections/{code}` | Public | Get section details by code (`APTITUDE`, etc.) |
+| `GET` | `/api/subjects/section/{code}` | Public | List subjects associated with a section |
+| `GET` | `/api/chapters/subject/{id}` | Public | List chapters under a subject |
+| `GET` | `/api/chapters/{id}` | Public | Get chapter statistics and question counts |
 
-### Backend ? Render
+### üìù Test Engine (`/api/tests`)
+| Method | Endpoint | Access | Description |
+|---|---|---|---|
+| `POST` | `/api/tests/start` | Student / Admin | Start a 5-minute timed test for a chapter |
+| `POST` | `/api/tests/random` | Student / Admin | Start a customized practice test |
+| `POST` | `/api/tests/{testId}/submit` | Student / Admin | Submit answers for scoring and review generation |
+| `GET` | `/api/tests/{testId}/result` | Student / Admin | View detailed test results and explanations |
+| `GET` | `/api/tests/history` | Student / Admin | List all completed test attempts for current user |
 
-1. Go to [render.com](https://render.com) ? **New Web Service**.
-2. Connect your GitHub repository.
-3. Configure:
-   - **Root Directory**: `backend`
-   - **Build Command**: `mvn clean package -DskipTests`
-   - **Start Command**: `java -jar target/*.jar`
-4. Add Environment Variables in Render dashboard:
+### üíª DSA Tracker (`/api/dsa`)
+| Method | Endpoint | Access | Description |
+|---|---|---|---|
+| `GET` | `/api/dsa/problems` | Authenticated | List problems with filters (topic, difficulty) + user status |
+| `PUT` | `/api/dsa/problems/{id}/status` | Authenticated | Update status (`NOT_STARTED`, `ATTEMPTED`, `SOLVED`) |
+| `GET` | `/api/dsa/topics` | Authenticated | List all distinct DSA topic categories |
 
-| Variable | Value |
-|----------|-------|
-| `SPRING_DATASOURCE_URL` | Supabase JDBC URL |
-| `SPRING_DATASOURCE_USERNAME` | Supabase DB username |
-| `SPRING_DATASOURCE_PASSWORD` | Supabase DB password |
-| `JWT_SECRET` | Long random secret string |
-| `GOOGLE_CLIENT_ID` | Google OAuth client ID |
-| `PORT` | `8080` |
+### üìä Dashboard & Analytics (`/api`)
+| Method | Endpoint | Access | Description |
+|---|---|---|---|
+| `GET` | `/api/dashboard` | Authenticated | Get student stats, streak counter, and recent tests |
+| `GET` | `/api/progress/overall` | Authenticated | Get chapter-wise mastery distribution |
 
-5. Click **Deploy**.
-
----
-
-### Database ? Supabase
-
-1. Go to [supabase.com](https://supabase.com) ? Create new project.
-2. Navigate to **Settings ? Database ? Connection String ? JDBC**.
-3. Copy the JDBC URL and use it as `SPRING_DATASOURCE_URL` in Render.
-4. Tables are created automatically on first startup (`ddl-auto: update`).
-
----
-
-## ?? Environment Variables Reference
-
-### Backend
-
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `SPRING_DATASOURCE_URL` | JDBC database connection URL | ? |
-| `SPRING_DATASOURCE_USERNAME` | Database username | ? |
-| `SPRING_DATASOURCE_PASSWORD` | Database password | ? |
-| `DATABASE_DRIVER` | JDBC driver class | Auto-detected |
-| `JWT_SECRET` | Secret key for signing JWT tokens | ? |
-| `GOOGLE_CLIENT_ID` | Google OAuth2 client ID | ? |
-| `PORT` | Server port | Defaults to `8080` |
-
-### Frontend
-
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `VITE_API_BASE_URL` | Base URL of the backend REST API | ? |
-| `VITE_GOOGLE_CLIENT_ID` | Google OAuth2 client ID | ? |
+### üõ°Ô∏è Admin Suite (`/api/admin` - Requires `ROLE_ADMIN`)
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/admin/dashboard` | Platform counts, question metrics, student growth |
+| `GET` | `/api/admin/students` | Paginated and searchable student directory |
+| `GET` | `/api/admin/students/{id}` | Detailed student profile and test record |
+| `GET` | `/api/admin/students/{id}/tests` | All test attempts of a given student |
+| `POST` | `/api/admin/questions` | Create a single question |
+| `PUT` | `/api/admin/questions/{id}` | Update question text, options, or answer |
+| `DELETE` | `/api/admin/questions/{id}` | Delete a question |
+| `POST` | `/api/admin/questions/bulk-preview` | Upload and preview questions from `.xlsx` Excel file |
+| `POST` | `/api/admin/questions/bulk-commit` | Commit validated bulk Excel questions |
+| `GET` | `/api/admin/questions/bulk-template` | Download standard bulk question Excel template |
+| `POST` | `/api/admin/subjects` | Create a subject |
+| `POST` | `/api/admin/chapters` | Create a chapter |
+| `POST` | `/api/admin/dsa` | Create a DSA problem |
 
 ---
 
-## ?? API Overview
+## üîí Security Architecture
 
-| Module | Base Path | Description |
-|--------|-----------|-------------|
-| Auth | `/api/auth` | Register, Login, Google OAuth login |
-| Dashboard | `/api/dashboard` | Student stats summary |
-| Tests | `/api/tests` | Start, submit, and get test results |
-| Progress | `/api/progress` | DSA and test analytics |
-| DSA | `/api/dsa` | Problems list and status tracking |
-| Content | `/api/content` | Subjects, chapters, sections |
-| Admin | `/api/admin` | Admin CRUD for all resources |
-| Health | `/api/health` | API health check |
-
-> Full interactive docs at `/swagger-ui.html`
+1. **Stateless JWT Tokens**:
+   - Access tokens generated using HMAC-SHA256 with 24-hour expiration.
+   - Extracted and verified on every incoming request by `AuthTokenFilter`.
+2. **Password Cryptography**:
+   - Industry-standard `BCryptPasswordEncoder` ensures zero plaintext passwords.
+3. **Role-Based Access Control (RBAC)**:
+   - Separate route guards in the frontend (`StudentRoute` vs `AdminRoute`).
+   - Method security `@PreAuthorize("hasAuthority('ROLE_ADMIN')")` prevents student accounts from accessing admin endpoints.
+4. **CORS Hardening**:
+   - Configured in `CorsConfig.java` to support requests from Vercel frontends, passing credentials and exposing authorization headers.
 
 ---
 
-## ??? Security
+## üìÅ Repository Structure
 
-- Passwords hashed with **BCrypt**
-- Protected routes require a **JWT Bearer Token** in the `Authorization` header
-- Google ID tokens verified server-side using Google public keys
-- Role-based access control: `ROLE_STUDENT` and `ROLE_ADMIN`
-- CORS configured to allow only the Vercel frontend origin
+```
+Placement-Prep-Platform/
+‚îú‚îÄ‚îÄ Dockerfile                      # Production multi-stage Docker build for Backend
+‚îú‚îÄ‚îÄ README.md                       # Comprehensive Project Documentation
+‚îÇ
+‚îú‚îÄ‚îÄ backend/                        # Spring Boot 3 Java Service
+‚îÇ   ‚îú‚îÄ‚îÄ pom.xml                     # Maven build definitions and dependencies
+‚îÇ   ‚îî‚îÄ‚îÄ src/main/
+‚îÇ       ‚îú‚îÄ‚îÄ java/com/placementprep/
+‚îÇ       ‚îÇ   ‚îú‚îÄ‚îÄ config/             # Security, CORS, Swagger, Database Seeders
+‚îÇ       ‚îÇ   ‚îú‚îÄ‚îÄ controller/         # REST API Controllers
+‚îÇ       ‚îÇ   ‚îú‚îÄ‚îÄ dto/                # Request/Response Data Transfer Objects
+‚îÇ       ‚îÇ   ‚îú‚îÄ‚îÄ entity/             # JPA Entities (User, Question, Test, etc.)
+‚îÇ       ‚îÇ   ‚îú‚îÄ‚îÄ exception/          # Global Exception Handling & Error Responses
+‚îÇ       ‚îÇ   ‚îú‚îÄ‚îÄ repository/         # Spring Data JPA Repositories
+‚îÇ       ‚îÇ   ‚îú‚îÄ‚îÄ security/           # JWT Utilities and Authentication Filters
+‚îÇ       ‚îÇ   ‚îî‚îÄ‚îÄ service/            # Business Logic & Test Assessment Engine
+‚îÇ       ‚îî‚îÄ‚îÄ resources/
+‚îÇ           ‚îî‚îÄ‚îÄ application.yml     # Spring Datasource, JPA, JWT, and Server Config
+‚îÇ
+‚îî‚îÄ‚îÄ frontend/                       # React 18 + Vite Frontend Application
+    ‚îú‚îÄ‚îÄ package.json                # NPM packages and build scripts
+    ‚îú‚îÄ‚îÄ vite.config.js              # Vite configuration
+    ‚îú‚îÄ‚îÄ tailwind.config.js          # Tailwind CSS styling and theme rules
+    ‚îú‚îÄ‚îÄ vercel.json                 # Vercel SPA client rewrite routing
+    ‚îú‚îÄ‚îÄ public/
+    ‚îÇ   ‚îî‚îÄ‚îÄ _redirects              # Netlify/Vercel static redirect rules
+    ‚îî‚îÄ‚îÄ src/
+        ‚îú‚îÄ‚îÄ api/                    # Axios HTTP client and endpoints
+        ‚îú‚îÄ‚îÄ components/             # Reusable UI components, Modals, Navbar, Layouts
+        ‚îú‚îÄ‚îÄ context/                # AuthContext, ThemeContext, ToastContext
+        ‚îú‚îÄ‚îÄ hooks/                  # Custom hooks (e.g. useTestTimer)
+        ‚îú‚îÄ‚îÄ pages/                  # Student views (Dashboard, Tests, DSA, CS)
+        ‚îÇ   ‚îî‚îÄ‚îÄ admin/              # Admin views (QuestionBank, Students, Curriculum)
+        ‚îî‚îÄ‚îÄ routes/                 # Protected routes and navigation guards
+```
 
 ---
 
-## ??? Database Schema
+## ü§ù Contributing
 
-| Entity | Key Fields |
-|--------|-----------|
-| `User` | id, name, email, password, role, authProvider |
-| `Subject` | id, name, description |
-| `Chapter` | id, title, subject_id |
-| `Section` | id, title, content, chapter_id |
-| `Question` | id, questionText, options, correctAnswer, subject_id, difficulty |
-| `TestAttempt` | id, user_id, subject_id, score, totalQuestions, status, startedAt |
-| `TestAnswer` | id, attempt_id, question_id, selectedAnswer, isCorrect |
-| `DsaProblem` | id, title, topic, difficulty, leetcodeUrl |
-| `UserDsaProgress` | id, user_id, problem_id, status |
+Contributions make the open-source community an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
----
-
-## ?? User Roles
-
-| Role | Access |
-|------|--------|
-| `ROLE_STUDENT` | Dashboard, Aptitude Tests, DSA Tracker, CS Fundamentals, Progress Analytics |
-| `ROLE_ADMIN` | All student features + Admin Panel (Students, Questions, Curriculum, DSA Problems) |
-
----
-
-## ?? Contributing
-
-1. Fork the repository
-2. Create a branch: `git checkout -b feature/your-feature-name`
-3. Commit changes: `git commit -m "feat: add your feature"`
-4. Push: `git push origin feature/your-feature-name`
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'feat: Add AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
 ---
 
-## ?? License
+## üìÑ License
 
-This project is licensed under the MIT License.
-
----
-
-## ????? Author
-
-**Aditya Hikke**
-GitHub: [@adityahikke](https://github.com/adityahikke)
+Distributed under the MIT License. See `LICENSE` for more information.
 
 ---
 
-> Built with ?? to help students crack placements ??
+## üë®‚Äçüíª Author
+
+**Aditya Hikke**  
+- GitHub: [@adityahikke](https://github.com/adityahikke)  
+- LinkedIn: [Aditya Hikke](https://www.linkedin.com/in/adityahikke)
+
+---
+
+<p align="center">
+  Built with ‚ù§Ô∏è to empower every student to crack their dream campus placement.
+</p>
