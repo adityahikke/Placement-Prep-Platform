@@ -39,9 +39,9 @@ public class TestEngineService {
         // Select 4 Easy, 4 Medium, 2 Hard
         List<Question> selectedQuestions = new ArrayList<>();
 
-        List<Question> easyQuestions = questionRepository.findRandomByChapterIdAndDifficultyNative(chapterId, "EASY", 4);
-        List<Question> mediumQuestions = questionRepository.findRandomByChapterIdAndDifficultyNative(chapterId, "MEDIUM", 4);
-        List<Question> hardQuestions = questionRepository.findRandomByChapterIdAndDifficultyNative(chapterId, "HARD", 2);
+        List<Question> easyQuestions = getRandomChapterQuestions(chapterId, Difficulty.EASY, 4);
+        List<Question> mediumQuestions = getRandomChapterQuestions(chapterId, Difficulty.MEDIUM, 4);
+        List<Question> hardQuestions = getRandomChapterQuestions(chapterId, Difficulty.HARD, 2);
 
         selectedQuestions.addAll(easyQuestions);
         selectedQuestions.addAll(mediumQuestions);
@@ -50,7 +50,8 @@ public class TestEngineService {
         // Fallback if difficulty split didn't return 10 questions
         if (selectedQuestions.size() < 10) {
             Set<Long> existingIds = selectedQuestions.stream().map(Question::getId).collect(Collectors.toSet());
-            List<Question> allChapterQuestions = questionRepository.findByChapterId(chapterId);
+            List<Question> allChapterQuestions = new ArrayList<>(questionRepository.findByChapterId(chapterId));
+            Collections.shuffle(allChapterQuestions);
             for (Question q : allChapterQuestions) {
                 if (!existingIds.contains(q.getId())) {
                     selectedQuestions.add(q);
@@ -135,19 +136,25 @@ public class TestEngineService {
         int count = request.getQuestionCount() != null ? request.getQuestionCount() : 10;
         if (count != 10 && count != 20 && count != 30) count = 10;
 
-        List<Question> selectedQuestions;
+        List<Question> availableQuestions;
         String difficulty = request.getDifficulty();
         if (difficulty != null && !difficulty.equalsIgnoreCase("MIXED")) {
-            selectedQuestions = questionRepository.findRandomBySectionCodeAndDifficultyNative(sectionCode, difficulty.toUpperCase(), count);
+            try {
+                Difficulty diffEnum = Difficulty.valueOf(difficulty.toUpperCase());
+                availableQuestions = new ArrayList<>(questionRepository.findBySectionCodeAndDifficulty(sectionCode, diffEnum));
+            } catch (IllegalArgumentException e) {
+                availableQuestions = new ArrayList<>(questionRepository.findBySectionCode(sectionCode));
+            }
         } else {
-            selectedQuestions = questionRepository.findRandomBySectionCodeNative(sectionCode, count);
+            availableQuestions = new ArrayList<>(questionRepository.findBySectionCode(sectionCode));
         }
 
-        if (selectedQuestions.isEmpty()) {
+        if (availableQuestions.isEmpty()) {
             throw new BadRequestException("No questions available for section " + sectionCode);
         }
 
-        Collections.shuffle(selectedQuestions);
+        Collections.shuffle(availableQuestions);
+        List<Question> selectedQuestions = availableQuestions.stream().limit(count).collect(Collectors.toList());
 
         TestAttempt testAttempt = TestAttempt.builder()
                 .user(currentUser)
@@ -384,5 +391,11 @@ public class TestEngineService {
                 .status(a.getStatus())
                 .build()
         ).collect(Collectors.toList());
+    }
+
+    private List<Question> getRandomChapterQuestions(Long chapterId, Difficulty difficulty, int limit) {
+        List<Question> questions = new ArrayList<>(questionRepository.findByChapterIdAndDifficulty(chapterId, difficulty));
+        Collections.shuffle(questions);
+        return questions.stream().limit(limit).collect(Collectors.toList());
     }
 }

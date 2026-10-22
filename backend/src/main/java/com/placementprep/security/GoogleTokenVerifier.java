@@ -58,7 +58,7 @@ public class GoogleTokenVerifier {
         // 1. Audience — the token must have been minted for *our* client ID.
         String aud = asString(claims.get("aud"));
         if (aud == null || !allowedAudiences.contains(aud)) {
-            logger.warn("Rejected Google token: audience '{}' is not in the allowed client-id list", aud);
+            logger.warn("Rejected Google token: audience '{}' is not in the allowed client-id list {}", aud, allowedAudiences);
             throw new BadRequestException("Google token was not issued for this application.");
         }
 

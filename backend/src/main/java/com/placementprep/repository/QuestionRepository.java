@@ -50,39 +50,9 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
     /** Duplicate guard for bulk upload: same question text already present in the same chapter. */
     boolean existsByChapterIdAndQuestionTextIgnoreCase(Long chapterId, String questionText);
 
-    @Query(value = "SELECT * FROM questions WHERE chapter_id = :chapterId AND difficulty = :difficulty ORDER BY RAND() LIMIT :limit", nativeQuery = true)
-    List<Question> findRandomByChapterIdAndDifficultyNative(
-            @Param("chapterId") Long chapterId,
-            @Param("difficulty") String difficulty,
-            @Param("limit") int limit
-    );
+    @Query("SELECT q FROM Question q WHERE q.chapter.subject.section.code = :sectionCode")
+    List<Question> findBySectionCode(@Param("sectionCode") String sectionCode);
 
-    @Query(value = "SELECT * FROM questions WHERE chapter_id = :chapterId ORDER BY RAND() LIMIT :limit", nativeQuery = true)
-    List<Question> findRandomByChapterIdNative(
-            @Param("chapterId") Long chapterId,
-            @Param("limit") int limit
-    );
-
-    @Query(value = "SELECT q.* FROM questions q " +
-            "JOIN chapters c ON q.chapter_id = c.id " +
-            "JOIN subjects s ON c.subject_id = s.id " +
-            "JOIN sections sec ON s.section_id = sec.id " +
-            "WHERE sec.code = :sectionCode " +
-            "ORDER BY RAND() LIMIT :limit", nativeQuery = true)
-    List<Question> findRandomBySectionCodeNative(
-            @Param("sectionCode") String sectionCode,
-            @Param("limit") int limit
-    );
-
-    @Query(value = "SELECT q.* FROM questions q " +
-            "JOIN chapters c ON q.chapter_id = c.id " +
-            "JOIN subjects s ON c.subject_id = s.id " +
-            "JOIN sections sec ON s.section_id = sec.id " +
-            "WHERE sec.code = :sectionCode AND q.difficulty = :difficulty " +
-            "ORDER BY RAND() LIMIT :limit", nativeQuery = true)
-    List<Question> findRandomBySectionCodeAndDifficultyNative(
-            @Param("sectionCode") String sectionCode,
-            @Param("difficulty") String difficulty,
-            @Param("limit") int limit
-    );
+    @Query("SELECT q FROM Question q WHERE q.chapter.subject.section.code = :sectionCode AND q.difficulty = :difficulty")
+    List<Question> findBySectionCodeAndDifficulty(@Param("sectionCode") String sectionCode, @Param("difficulty") Difficulty difficulty);
 }

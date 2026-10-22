@@ -1,5 +1,30 @@
+# Dependencies
 node_modules/
 frontend/node_modules/
+
+# Build artifacts
+target/
 backend/target/
+dist/
+frontend/dist/
+
+# Environment files
 .env
 .env.*
+!.env.example
+
+# IDE & OS
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+hs_err_pid*
+replay_pid*
+
+# Database files
+backend/data/
+*.mv.db
