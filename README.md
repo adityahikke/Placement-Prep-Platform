@@ -6,9 +6,12 @@
 [![Vite](https://img.shields.io/badge/Vite-6.1.0-646CFF.svg?style=flat&logo=vite)](https://vitejs.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-3.4.17-38B2AC.svg?style=flat&logo=tailwind-css)](https://tailwindcss.com/)
 [![PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL%20%2F%20Supabase-336791.svg?style=flat&logo=postgresql)](https://supabase.com/)
-[![Deployment - Vercel](https://img.shields.io/badge/Frontend-Vercel-black.svg?style=flat&logo=vercel)](https://vercel.com/)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-apticode--rho.vercel.app-brightgreen.svg?style=flat&logo=vercel)](https://apticode-rho.vercel.app/login)
 [![Deployment - Render](https://img.shields.io/badge/Backend-Render-46E3B7.svg?style=flat&logo=render)](https://render.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+> 🚀 **Live Demo**: **[https://apticode-rho.vercel.app/login](https://apticode-rho.vercel.app/login)**  
+> Try the live application directly in your browser with the demo credentials below!
 
 A modern, production-grade full-stack platform designed to help engineering students prepare effectively for campus placements, technical assessments, and software engineering interviews. 
 
@@ -20,9 +23,9 @@ The platform features timed topic-based tests, comprehensive CS fundamentals lea
 
 The application is architected as a decoupled, modern cloud-native system:
 
-| Layer | Hosting Provider | Default Service URL | Description |
+| Layer | Hosting Provider | Live URL / Endpoint | Description |
 |---|---|---|---|
-| **Frontend** | [Vercel](https://vercel.com) | `https://placement-prep-platform.vercel.app` | React 18 SPA with global edge delivery & instant cache invalidation |
+| **Frontend (Live Demo)** | [Vercel](https://vercel.com) | [apticode-rho.vercel.app/login](https://apticode-rho.vercel.app/login) | Production React 18 SPA with global edge delivery |
 | **Backend REST API** | [Render](https://render.com) | `https://placementprep-backend.onrender.com` | Dockerized Spring Boot 3 service with automatic zero-downtime deploys |
 | **Database** | [Supabase](https://supabase.com) | `aws-0-[region].pooler.supabase.com:6543` | Managed PostgreSQL with connection pooling & automated failover |
 | **API Documentation** | Swagger / OpenAPI 3 | `https://placementprep-backend.onrender.com/swagger-ui.html` | Interactive REST API testing interface |
@@ -226,7 +229,8 @@ You can deploy the Spring Boot backend on Render using the included multi-stage 
 | `VITE_API_BASE_URL` | `https://placementprep-backend.onrender.com` | URL of your deployed Render backend (omit trailing slash) |
 | `VITE_GOOGLE_CLIENT_ID` | `your-client-id.apps.googleusercontent.com` | Google OAuth Web Client ID |
 
-5. Click **Deploy**. Vercel will build and host your frontend globally with automatic routing rewrites (`vercel.json` and `public/_redirects`).
+5. Click **Deploy**. Vercel will build and host your frontend globally with automatic routing rewrites (`vercel.json` and `public/_redirects`).  
+   - **Production URL**: [https://apticode-rho.vercel.app/login](https://apticode-rho.vercel.app/login)
 
 ---
 
