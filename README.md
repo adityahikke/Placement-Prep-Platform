@@ -1,397 +1,325 @@
-# ğŸ“ PlacementPrep â€” Full-Stack Placement Preparation Platform
+# ?? PlacementPrep Platform
 
-> A production-ready, full-stack web application designed for engineering students preparing for top tier campus placements and technical interviews across **Quantitative & Logical Aptitude**, **CS Fundamentals**, and **Data Structures & Algorithms (DSA)**.
-
----
-
-## ğŸ“‘ Table of Contents
-
-- [Overview](#-overview)
-- [Key Features](#-key-features)
-  - [Student Experience](#1-student-experience)
-  - [Admin Experience](#2-admin-portal)
-- [Technology Stack](#-technology-stack)
-- [System Architecture](#-system-architecture)
-- [Directory Structure](#-directory-structure)
-- [Quick Start Guide](#-quick-start-guide)
-  - [Prerequisites](#prerequisites)
-  - [1. Database Configuration (Local MySQL or Railway)](#1-database-configuration)
-  - [2. Backend Setup (Spring Boot)](#2-backend-setup-spring-boot)
-  - [3. Frontend Setup (React + Vite)](#3-frontend-setup-react--vite)
-- [Configuration & Environment Variables](#-configuration--environment-variables)
-- [Google OAuth 2.0 Integration](#-google-oauth-20-integration)
-- [Pre-Seeded Demo Credentials](#-pre-seeded-demo-credentials)
-- [REST API Reference](#-rest-api-reference)
-- [Database Schema & Auto-Seeding](#-database-schema--auto-seeding)
-- [Production Build & Deployment](#-production-build--deployment)
-- [Contributing & License](#-license)
+A full-stack web application designed to help students prepare for campus placements. It covers aptitude tests, DSA problem tracking, CS fundamentals, and provides an admin panel to manage content and monitor student progress.
 
 ---
 
-## ğŸŒŸ Overview
+## ?? Live Demo
 
-**PlacementPrep** is an all-in-one preparation ecosystem that combines timed mock assessments, curriculum-aligned topic tests, interactive DSA problem tracking, real-time analytics, and an administrative management suite.
-
----
-
-## âœ¨ Key Features
-
-### 1. Student Experience
-
-- **ğŸ” Secure Authentication:**
-  - Standard Email + Password registration & login with stateless JWT tokens.
-  - **One-Tap Sign in with Google** via Google Identity Services (automatically creates student accounts on first login).
-  - Role-based authorization (`ROLE_STUDENT`, `ROLE_ADMIN`).
-  - Profile tracking with College, Branch, and Graduation Year.
-
-- **ğŸ“Š Smart Dashboard & Analytics:**
-  - Real-time placement metrics: total questions solved, tests attempted, average accuracy, and daily login streak.
-  - Overall syllabus completion progress bars across all sections.
-  - Automated detection of **Strong Areas** (Accuracy $\ge$ 75%) and **Weak Areas** (Accuracy $<$ 50%) with personalized recommendations.
-
-- **ğŸ§® Section 1: Aptitude (Chapter-Wise):**
-  - Quantitative Aptitude (Percentages, Profit & Loss, Time & Work, Ratio & Proportion, Number Systems, Permutations & Combinations, Probability, etc.).
-  - Logical Reasoning & Verbal Ability.
-  - Questions stratified into **Easy**, **Medium**, and **Hard** tiers.
-  - **5-Minute Chapter Test Engine**: Automatically selects 10 balanced questions (4 Easy, 4 Medium, 2 Hard) with live countdown timer and auto-submission on expiration.
-
-- **ğŸ’» Section 2: CS Fundamentals:**
-  - Core subject tests: **Operating Systems (OS)**, **Database Management Systems (DBMS)**, **Computer Networks (CN)**, and **Object-Oriented Programming (OOP)**.
-  - In-depth, step-by-step conceptual explanations for every question.
-
-- **ğŸŒ² Section 3: Curated DSA Tracker:**
-  - High-frequency placement problems categorized across 19 standard topics (Arrays, Strings, Linked Lists, Trees, Graphs, Dynamic Programming, Greedy, etc.).
-  - Interactive status toggle (`NOT_STARTED`, `ATTEMPTED`, `SOLVED`) with direct external links to LeetCode and GeeksforGeeks.
-  - **Sticky "Solved" Protection:** Once a problem is marked Solved, it cannot be accidentally downgraded without an explicit *Undo â†’ Confirm* modal (enforced on both frontend and backend).
-
-- **ğŸ² Custom Random Test Generator:**
-  - Create customized mock tests by selecting Target Section, Difficulty (Easy / Medium / Hard / Mixed), and Question Count (10, 20, or 30 questions).
-
-- **ğŸ“ Interactive Test Taking Environment:**
-  - Real-time countdown timer with auto-submit.
-  - Question palette with status indicators (Answered, Unanswered, Marked for Review).
-  - Clear answer and review options before final submission.
-
-- **ğŸ† Instant Results & Explanations Engine:**
-  - Detailed score, percentage accuracy, and time taken.
-  - Filterable question review: All, Correct, Incorrect, and Unattempted.
-  - Step-by-step mathematical formulas, code snippets, and explanations.
+| Service | URL |
+|---------|-----|
+| Frontend | [Deployed on Vercel](https://your-app.vercel.app) |
+| Backend API | [Deployed on Render](https://your-api.onrender.com) |
+| Swagger UI | `https://your-api.onrender.com/swagger-ui.html` |
 
 ---
 
-### 2. Admin Portal
+## ?? Tech Stack
 
-- **ğŸ“ˆ Platform Telemetry Dashboard:**
-  - Live statistics: total registered students, total tests completed, question bank volume, and question distribution by subject/difficulty.
-- **ğŸ‘¥ Student Directory:**
-  - Searchable, paginated student management with view-only student profile and historical test breakdown.
-- **ğŸ“š Question Bank Management:**
-  - Full CRUD capabilities: create, update, search, filter, and delete questions.
-- **ğŸ“¤ Two-Step Bulk Upload:**
-  - Upload question spreadsheets via CSV or Excel (`.xlsx`, `.xls`).
-  - **Interactive Preview & Validation**: Scans uploaded files, flags errors row-by-row, and provides a transactional commit button.
-- **ğŸ—‚ï¸ Curriculum & Subject Manager:**
-  - Add, edit, and organize Sections, Subjects, and Chapters dynamically.
-- **ğŸ§© DSA Problem Management:**
-  - Create, update, categorize, and link new DSA problems to LeetCode/GFG.
+### Frontend
+| Technology | Purpose |
+|------------|---------|
+| React 18 | UI Framework |
+| Vite | Build Tool |
+| React Router DOM v6 | Client-side Routing |
+| Tailwind CSS | Styling |
+| Axios | HTTP Client |
+| Lucide React | Icons |
+| Canvas Confetti | Animations |
 
----
-
-## ğŸ› ï¸ Technology Stack
-
-| Layer | Technologies |
-|---|---|
-| **Frontend** | React 18, Vite 6, Tailwind CSS 3, Lucide Icons, Canvas-Confetti, Axios, React Router 6 |
-| **Backend** | Java 21, Spring Boot 3.4.x (Web, Data JPA, Security), JJWT, Lombok, Jakarta Validation, Springdoc OpenAPI |
-| **Database** | MySQL 8.x (Local or Railway / Cloud MySQL) |
-| **Authentication** | JWT (JSON Web Tokens) + Google Identity Services (OAuth 2.0 ID Token verification) |
-| **Documentation** | Swagger / OpenAPI 3.1 (`/swagger-ui.html` & `/api-docs`) |
-| **Build Tools** | Maven (Backend) & npm / Vite (Frontend) |
+### Backend
+| Technology | Purpose |
+|------------|---------|
+| Java 21 | Language |
+| Spring Boot 3 | Application Framework |
+| Spring Security + JWT | Authentication and Authorization |
+| Spring Data JPA / Hibernate | ORM and Database Access |
+| PostgreSQL | Production Database |
+| Supabase | Managed PostgreSQL (Production) |
+| SpringDoc OpenAPI | Swagger API Documentation |
+| Apache POI | Excel file parsing for Bulk Upload |
+| Google OAuth2 | Social Login |
 
 ---
 
-## ğŸ—ï¸ System Architecture
+## ? Features
 
-```mermaid
-graph TD
-    Client["Client (Browser / React 18 + Vite)"]
-    
-    subgraph Frontend["Frontend Layer (Port 5173)"]
-        UI["React Components & Tailwind UI"]
-        AuthContext["Auth Context (JWT + Google OAuth)"]
-        AxiosClient["Axios Interceptor (/api proxy)"]
-    end
-    
-    subgraph Backend["Spring Boot Backend Layer (Port 8080)"]
-        SecurityFilter["Spring Security Filter Chain & JWT Validator"]
-        Controllers["REST Controllers (/api/*)"]
-        Services["Business Logic Services"]
-        Repositories["Spring Data JPA Repositories"]
-    end
-    
-    subgraph Database["Data Layer"]
-        MySQL[("MySQL Database (Local / Railway)")]
-    end
-    
-    Client --> UI
-    UI --> AuthContext
-    UI --> AxiosClient
-    AxiosClient --> SecurityFilter
-    SecurityFilter --> Controllers
-    Controllers --> Services
-    Services --> Repositories
-    Repositories --> MySQL
+### ????? Student Features
+- **Register / Login** — Email and password or Google OAuth2
+- **Dashboard** — Overview of tests taken, DSA progress, study streaks
+- **Aptitude Tests** — Subject-wise MCQ tests with timer and auto-submit
+- **Test History** — View all past test attempts with scores and timestamps
+- **Test Results** — Detailed result page with correct/wrong answer review
+- **CS Fundamentals** — Chapter-based study material for OS, DBMS, CN, OOPs
+- **DSA Tracker** — Track LeetCode-style problems by topic and difficulty
+- **Progress Analytics** — Charts showing performance trends over time
+
+### ??? Admin Features
+- **Admin Dashboard** — Summary stats (students, questions, test attempts)
+- **Question Bank** — Add, edit, delete MCQ questions with bulk Excel upload
+- **Curriculum Manager** — Manage Subjects ? Chapters ? Sections hierarchy
+- **DSA Problems Manager** — Add/edit DSA problems with topic/difficulty tags
+- **Student Management** — View all registered students
+- **Student Detail View** — Inspect individual student test history and progress
+
+---
+
+## ??? Project Structure
+
+```
+Placement-Prep-Platform/
++-- backend/                        # Spring Boot Java application
+¦   +-- src/
+¦   ¦   +-- main/
+¦   ¦       +-- java/com/placementprep/
+¦   ¦       ¦   +-- config/         # CORS, Security, Swagger config
+¦   ¦       ¦   +-- controller/     # REST API controllers
+¦   ¦       ¦   +-- dto/            # Data Transfer Objects
+¦   ¦       ¦   +-- entity/         # JPA Entity classes
+¦   ¦       ¦   +-- exception/      # Global exception handling
+¦   ¦       ¦   +-- repository/     # Spring Data JPA repositories
+¦   ¦       ¦   +-- security/       # JWT + Google token verifier
+¦   ¦       ¦   +-- service/        # Business logic services
+¦   ¦       +-- resources/
+¦   ¦           +-- application.yml
+¦   +-- pom.xml
+¦
++-- frontend/                       # React + Vite application
+¦   +-- src/
+¦   ¦   +-- api/                    # Axios client and API calls
+¦   ¦   +-- components/             # Reusable UI components
+¦   ¦   +-- context/                # React context (Auth)
+¦   ¦   +-- hooks/                  # Custom React hooks
+¦   ¦   +-- pages/
+¦   ¦   ¦   +-- admin/              # Admin panel pages
+¦   ¦   ¦   +-- Dashboard.jsx
+¦   ¦   ¦   +-- Aptitude.jsx
+¦   ¦   ¦   +-- DsaTracker.jsx
+¦   ¦   ¦   +-- CsFundamentals.jsx
+¦   ¦   ¦   +-- ProgressAnalytics.jsx
+¦   ¦   ¦   +-- TestHistory.jsx
+¦   ¦   ¦   +-- TestEnvironment.jsx
+¦   ¦   ¦   +-- TestResult.jsx
+¦   ¦   +-- routes/
+¦   ¦   +-- App.jsx
+¦   ¦   +-- main.jsx
+¦   +-- package.json
+¦   +-- vercel.json
+¦
++-- README.md
 ```
 
 ---
 
-## ğŸ“ Directory Structure
-
-```text
-â”œâ”€â”€ backend/
-â”‚   â”œâ”€â”€ src/main/java/com/placementprep/
-â”‚   â”‚   â”œâ”€â”€ config/              # Security, CORS, Swagger, Seeders (Curriculum & Initializer)
-â”‚   â”‚   â”œâ”€â”€ controller/          # Auth, Admin, Content, Test, DSA, Dashboard, Progress, Health
-â”‚   â”‚   â”œâ”€â”€ dto/                 # Request & Response Data Transfer Objects
-â”‚   â”‚   â”œâ”€â”€ entity/              # JPA Entities (User, Question, Subject, Chapter, TestAttempt, etc.)
-â”‚   â”‚   â”œâ”€â”€ exception/           # Global Exception Handlers & Custom Exceptions
-â”‚   â”‚   â”œâ”€â”€ repository/         # Spring Data JPA Repositories
-â”‚   â”‚   â”œâ”€â”€ security/            # JWT Token Provider, Auth Filters, UserDetails Service
-â”‚   â”‚   â””â”€â”€ service/             # Business Logic & Service Implementations
-â”‚   â”œâ”€â”€ src/main/resources/
-â”‚   â”‚   â””â”€â”€ application.yml      # App configuration, DataSource, JPA, JWT, Google Client ID
-â”‚   â””â”€â”€ pom.xml                  # Maven dependencies & build definitions
-â”‚
-â”œâ”€â”€ frontend/
-â”‚   â”œâ”€â”€ public/                  # Static assets
-â”‚   â”œâ”€â”€ src/
-â”‚   â”‚   â”œâ”€â”€ api/                 # Axios HTTP client configuration & endpoint helpers
-â”‚   â”‚   â”œâ”€â”€ components/          # Reusable UI components, Modals, Navbar, Brand Intro
-â”‚   â”‚   â”œâ”€â”€ context/             # AuthContext & global state providers
-â”‚   â”‚   â”œâ”€â”€ hooks/               # Custom React hooks
-â”‚   â”‚   â”œâ”€â”€ pages/               # Student pages (Dashboard, Aptitude, CS, DSA, Test, Results)
-â”‚   â”‚   â”‚   â””â”€â”€ admin/           # Admin pages (Dashboard, Students, Questions, Curriculum, DSA)
-â”‚   â”‚   â”œâ”€â”€ routes/              # Protected & Role-based route definitions
-â”‚   â”‚   â”œâ”€â”€ App.jsx              # Application root
-â”‚   â”‚   â””â”€â”€ index.css            # Tailwind & custom animation styles
-â”‚   â”œâ”€â”€ package.json             # Frontend dependencies & npm scripts
-â”‚   â”œâ”€â”€ vite.config.js           # Vite dev server & proxy settings
-â”‚   â””â”€â”€ tailwind.config.js       # Tailwind CSS configuration
-â””â”€â”€ README.md
-```
-
----
-
-## ğŸš€ Quick Start Guide
+## ?? Local Development Setup
 
 ### Prerequisites
-
-- **Java Development Kit (JDK):** Version 21
-- **Apache Maven:** Version 3.9+
-- **Node.js:** Version 18+ and `npm`
-- **Database:** MySQL Server 8.0+ (Local or Cloud instance e.g., Railway / PlanetScale)
-
----
-
-### 1. Database Configuration
-
-#### Option A: Local MySQL
-1. Ensure MySQL is running on `localhost:3306`.
-2. Default username is `root`.
-3. Set your root password in `backend/src/main/resources/application.yml` or export the environment variable:
-   ```bash
-   export DATABASE_PASSWORD="your_mysql_password"
-   ```
-
-#### Option B: Railway / Cloud MySQL
-1. Create a MySQL database instance in [Railway](https://railway.app/).
-2. Copy the JDBC connection details and configure them in `backend/src/main/resources/application.yml` or set environment variables:
-   ```bash
-   # Windows PowerShell
-   $env:DATABASE_URL="jdbc:mysql://<host>:<port>/<database>?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC"
-   $env:DATABASE_USERNAME="root"
-   $env:DATABASE_PASSWORD="<railway_password>"
-
-   # Linux / macOS
-   export DATABASE_URL="jdbc:mysql://<host>:<port>/<database>?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC"
-   export DATABASE_USERNAME="root"
-   export DATABASE_PASSWORD="<railway_password>"
-   ```
-
-> ğŸ’¡ **Automatic Table Creation**: `spring.jpa.hibernate.ddl-auto` is set to `update`. The database and all tables are created and seeded automatically on first startup!
+- Java 21+
+- Maven 3.9+
+- Node.js 18+
+- PostgreSQL (local) **or** a Supabase project URL
 
 ---
 
-### 2. Backend Setup (Spring Boot)
+### 1. Clone the Repository
 
 ```bash
-# Navigate to backend directory
-cd backend
+git clone https://github.com/adityahikke/placement-prep-platform.git
+cd placement-prep-platform
+```
 
-# Run the Spring Boot application
+---
+
+### 2. Backend Setup
+
+Set the following environment variables (or create an `.env` file and export them):
+
+```env
+SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/placementprep
+SPRING_DATASOURCE_USERNAME=postgres
+SPRING_DATASOURCE_PASSWORD=yourpassword
+JWT_SECRET=your_jwt_secret_here
+GOOGLE_CLIENT_ID=your_google_oauth_client_id
+```
+
+> **Using Supabase?** Replace `SPRING_DATASOURCE_URL` with your Supabase JDBC URL:
+> `jdbc:postgresql://aws-0-ap-northeast-1.pooler.supabase.com:6543/postgres?user=postgres.xxxx&password=xxxx`
+
+Run the backend:
+
+```bash
+cd backend
 mvn spring-boot:run
 ```
 
-- **Backend API URL:** `http://localhost:8080`
-- **Interactive Swagger UI:** `http://localhost:8080/swagger-ui.html`
-- **OpenAPI JSON Spec:** `http://localhost:8080/api-docs`
-- **Health Check:** `http://localhost:8080/api/health`
+- API runs at: `http://localhost:8080`
+- Swagger UI: `http://localhost:8080/swagger-ui.html`
 
 ---
 
-### 3. Frontend Setup (React + Vite)
+### 3. Frontend Setup
+
+Create `frontend/.env`:
+
+```env
+VITE_API_BASE_URL=http://localhost:8080
+VITE_GOOGLE_CLIENT_ID=your_google_oauth_client_id
+```
+
+Install and run:
 
 ```bash
-# Open a new terminal and navigate to frontend directory
 cd frontend
-
-# Install dependencies
 npm install
-
-# Start the Vite development server
 npm run dev
-# (On Windows PowerShell if execution policy blocks npm, use: npm.cmd run dev)
 ```
 
-- **Frontend Application URL:** `http://localhost:5173`
-- The Vite dev server is pre-configured to proxy `/api` requests to `http://localhost:8080`.
+Frontend runs at: `http://localhost:5173`
 
 ---
 
-## âš™ï¸ Configuration & Environment Variables
+## ?? Deployment Guide
 
-### Backend (`application.yml` / System Env)
+### Frontend ? Vercel
 
-| Variable | Description | Default / Example |
-|---|---|---|
-| `DATABASE_URL` | JDBC Connection URL | `jdbc:mysql://localhost:3306/placement_prep?...` |
-| `DATABASE_USERNAME` | Database username | `root` |
-| `DATABASE_PASSWORD` | Database password | `Adi123*#` |
-| `JWT_SECRET` | 256-bit Hex/Base64 secret for JWT signing | `404E6352...` |
-| `GOOGLE_CLIENT_ID` | Google OAuth 2.0 Web Client ID | `your-id.apps.googleusercontent.com` |
-
-### Frontend (`frontend/.env`)
-
-| Variable | Description | Default / Example |
-|---|---|---|
-| `VITE_GOOGLE_CLIENT_ID` | Google OAuth 2.0 Web Client ID | `your-id.apps.googleusercontent.com` |
-| `VITE_API_BASE_URL` | Base URL for API (for production builds) | `http://localhost:8080/api` |
+1. Push your repository to GitHub.
+2. Go to [vercel.com](https://vercel.com) ? **New Project** ? Import GitHub repo.
+3. Set **Root Directory** to `frontend`.
+4. Add Environment Variables:
+   - `VITE_API_BASE_URL` ? your Render backend URL (e.g., `https://your-api.onrender.com`)
+   - `VITE_GOOGLE_CLIENT_ID` ? your Google OAuth client ID
+5. Click **Deploy**.
 
 ---
 
-## ğŸ”‘ Pre-Seeded Demo Credentials
+### Backend ? Render
 
-Upon initial launch, database seeders (`DataInitializer` and `CurriculumSeeder`) automatically populate sample accounts and curriculum questions:
+1. Go to [render.com](https://render.com) ? **New Web Service**.
+2. Connect your GitHub repository.
+3. Configure:
+   - **Root Directory**: `backend`
+   - **Build Command**: `mvn clean package -DskipTests`
+   - **Start Command**: `java -jar target/*.jar`
+4. Add Environment Variables in Render dashboard:
 
-| Role | Email | Password | Access Rights |
-|---|---|---|---|
-| **Student** | `student@placementprep.com` | `student123` | Student Dashboard, Aptitude Tests, CS Tests, DSA Tracker, History |
-| **Admin** | `admin@placementprep.com` | `admin123` | Admin Dashboard, Question Bank CRUD, Bulk Upload, Student Management |
+| Variable | Value |
+|----------|-------|
+| `SPRING_DATASOURCE_URL` | Supabase JDBC URL |
+| `SPRING_DATASOURCE_USERNAME` | Supabase DB username |
+| `SPRING_DATASOURCE_PASSWORD` | Supabase DB password |
+| `JWT_SECRET` | Long random secret string |
+| `GOOGLE_CLIENT_ID` | Google OAuth client ID |
+| `PORT` | `8080` |
 
-*(Quick 1-click credential fill buttons are also available on the Login page).*
-
----
-
-## ğŸŒ Google OAuth 2.0 Integration
-
-To enable the **"Continue with Google"** one-tap button:
-
-1. Open [Google Cloud Console](https://console.cloud.google.com/) $\rightarrow$ **APIs & Services $\rightarrow$ Credentials**.
-2. Create **OAuth 2.0 Client ID** (Application Type: **Web application**).
-3. Add Authorized JavaScript Origins:
-   - `http://localhost:5173` (Local Vite Dev Server)
-   - `http://localhost:8080` (Local Spring Boot Server)
-   - Your production domains (if deployed).
-4. Paste the Client ID into:
-   - `frontend/.env` $\rightarrow$ `VITE_GOOGLE_CLIENT_ID`
-   - `backend/src/main/resources/application.yml` or `GOOGLE_CLIENT_ID` environment variable.
+5. Click **Deploy**.
 
 ---
 
-## ğŸ“¡ REST API Reference
+### Database ? Supabase
 
-### ğŸ” Authentication (`/api/auth`)
-| Method | Endpoint | Description | Auth Required |
-|---|---|---|---|
-| `POST` | `/api/auth/register` | Register new student profile | No |
-| `POST` | `/api/auth/login` | Login with email/password (returns JWT) | No |
-| `POST` | `/api/auth/google` | Authenticate with Google ID token | No |
-| `GET` | `/api/auth/me` | Fetch authenticated user profile | Yes (`Bearer Token`) |
-
-### ğŸ“š Curriculum & Content (`/api`)
-| Method | Endpoint | Description | Auth Required |
-|---|---|---|---|
-| `GET` | `/api/sections` | List all sections (Aptitude, CS, DSA) | Yes |
-| `GET` | `/api/sections/{code}` | Get section details and subjects | Yes |
-| `GET` | `/api/subjects/section/{sectionCode}` | Get subjects by section | Yes |
-| `GET` | `/api/chapters/subject/{subjectId}` | Get chapters for a subject | Yes |
-| `GET` | `/api/chapters/{chapterId}` | Get chapter detail & question counts | Yes |
-
-### â±ï¸ Test Engine (`/api/tests`)
-| Method | Endpoint | Description | Auth Required |
-|---|---|---|---|
-| `POST` | `/api/tests/start` | Start 5-min balanced chapter test (4E, 4M, 2H) | Yes |
-| `POST` | `/api/tests/random` | Start randomized custom test | Yes |
-| `POST` | `/api/tests/{testId}/submit` | Submit answers, calculate score & solutions | Yes |
-| `GET` | `/api/tests/{testId}/result` | View detailed test results and explanations | Yes |
-| `GET` | `/api/tests/history` | Get student test attempt history | Yes |
-
-### ğŸ“Š Dashboard & Progress (`/api`)
-| Method | Endpoint | Description | Auth Required |
-|---|---|---|---|
-| `GET` | `/api/dashboard` | Student metrics, streaks, strong/weak areas | Yes |
-| `GET` | `/api/progress/overall` | Overall syllabus mastery breakdown | Yes |
-
-### ğŸ§© DSA Tracker (`/api/dsa`)
-| Method | Endpoint | Description | Auth Required |
-|---|---|---|---|
-| `GET` | `/api/dsa/topics` | Get list of distinct DSA topics | Yes |
-| `GET` | `/api/dsa/problems` | List problems with user status and topic filter | Yes |
-| `PUT` | `/api/dsa/problems/{problemId}/status` | Update problem status (`NOT_STARTED`, `ATTEMPTED`, `SOLVED`) | Yes |
-
-### ğŸ›¡ï¸ Admin Management (`/api/admin` - Requires `ROLE_ADMIN`)
-| Method | Endpoint | Description |
-|---|---|---|
-| `GET` | `/api/admin/dashboard` | High-level metrics, counts, and recent registrations |
-| `GET` | `/api/admin/students` | Search and list registered students (paginated) |
-| `GET` | `/api/admin/students/{id}` | View detailed student test history & profile |
-| `GET` | `/api/admin/questions/statistics` | Question distribution per section and chapter |
-| `GET` | `/api/admin/questions` | List questions with search & difficulty filters |
-| `POST` | `/api/admin/questions` | Create a new question |
-| `PUT` | `/api/admin/questions/{id}` | Update existing question |
-| `DELETE`| `/api/admin/questions/{id}` | Delete a question |
-| `POST` | `/api/admin/questions/bulk-upload` | Validate and preview CSV/Excel question file |
-| `POST` | `/api/admin/questions/bulk-commit` | Commit validated question batch to database |
-| `POST` | `/api/admin/subjects` | Create subject |
-| `PUT` | `/api/admin/subjects/{id}` | Update subject |
-| `POST` | `/api/admin/chapters` | Create chapter |
-| `PUT` | `/api/admin/chapters/{id}` | Update chapter |
-| `GET` | `/api/admin/dsa-problems` | List DSA problems |
-| `POST` | `/api/admin/dsa-problems` | Create DSA problem |
-| `PUT` | `/api/admin/dsa-problems/{id}` | Update DSA problem |
-| `DELETE`| `/api/admin/dsa-problems/{id}` | Delete DSA problem |
+1. Go to [supabase.com](https://supabase.com) ? Create new project.
+2. Navigate to **Settings ? Database ? Connection String ? JDBC**.
+3. Copy the JDBC URL and use it as `SPRING_DATASOURCE_URL` in Render.
+4. Tables are created automatically on first startup (`ddl-auto: update`).
 
 ---
 
-## ğŸ“¦ Production Build & Deployment
+## ?? Environment Variables Reference
 
-### Build Backend
-```bash
-cd backend
-mvn clean package -DskipTests
-# The executable JAR will be located at: target/placementprep-backend-1.0.0.jar
-java -jar target/placementprep-backend-1.0.0.jar
-```
+### Backend
 
-### Build Frontend
-```bash
-cd frontend
-npm run build
-# The optimized production files will be output to: frontend/dist/
-```
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `SPRING_DATASOURCE_URL` | JDBC database connection URL | ? |
+| `SPRING_DATASOURCE_USERNAME` | Database username | ? |
+| `SPRING_DATASOURCE_PASSWORD` | Database password | ? |
+| `DATABASE_DRIVER` | JDBC driver class | Auto-detected |
+| `JWT_SECRET` | Secret key for signing JWT tokens | ? |
+| `GOOGLE_CLIENT_ID` | Google OAuth2 client ID | ? |
+| `PORT` | Server port | Defaults to `8080` |
+
+### Frontend
+
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `VITE_API_BASE_URL` | Base URL of the backend REST API | ? |
+| `VITE_GOOGLE_CLIENT_ID` | Google OAuth2 client ID | ? |
 
 ---
 
-## ğŸ“„ License
+## ?? API Overview
 
-This project is licensed under the **MIT License**. Feel free to use, modify, and distribute for educational and commercial purposes.
+| Module | Base Path | Description |
+|--------|-----------|-------------|
+| Auth | `/api/auth` | Register, Login, Google OAuth login |
+| Dashboard | `/api/dashboard` | Student stats summary |
+| Tests | `/api/tests` | Start, submit, and get test results |
+| Progress | `/api/progress` | DSA and test analytics |
+| DSA | `/api/dsa` | Problems list and status tracking |
+| Content | `/api/content` | Subjects, chapters, sections |
+| Admin | `/api/admin` | Admin CRUD for all resources |
+| Health | `/api/health` | API health check |
+
+> Full interactive docs at `/swagger-ui.html`
+
+---
+
+## ??? Security
+
+- Passwords hashed with **BCrypt**
+- Protected routes require a **JWT Bearer Token** in the `Authorization` header
+- Google ID tokens verified server-side using Google public keys
+- Role-based access control: `ROLE_STUDENT` and `ROLE_ADMIN`
+- CORS configured to allow only the Vercel frontend origin
+
+---
+
+## ??? Database Schema
+
+| Entity | Key Fields |
+|--------|-----------|
+| `User` | id, name, email, password, role, authProvider |
+| `Subject` | id, name, description |
+| `Chapter` | id, title, subject_id |
+| `Section` | id, title, content, chapter_id |
+| `Question` | id, questionText, options, correctAnswer, subject_id, difficulty |
+| `TestAttempt` | id, user_id, subject_id, score, totalQuestions, status, startedAt |
+| `TestAnswer` | id, attempt_id, question_id, selectedAnswer, isCorrect |
+| `DsaProblem` | id, title, topic, difficulty, leetcodeUrl |
+| `UserDsaProgress` | id, user_id, problem_id, status |
+
+---
+
+## ?? User Roles
+
+| Role | Access |
+|------|--------|
+| `ROLE_STUDENT` | Dashboard, Aptitude Tests, DSA Tracker, CS Fundamentals, Progress Analytics |
+| `ROLE_ADMIN` | All student features + Admin Panel (Students, Questions, Curriculum, DSA Problems) |
+
+---
+
+## ?? Contributing
+
+1. Fork the repository
+2. Create a branch: `git checkout -b feature/your-feature-name`
+3. Commit changes: `git commit -m "feat: add your feature"`
+4. Push: `git push origin feature/your-feature-name`
+5. Open a Pull Request
+
+---
+
+## ?? License
+
+This project is licensed under the MIT License.
+
+---
+
+## ????? Author
+
+**Aditya Hikke**
+GitHub: [@adityahikke](https://github.com/adityahikke)
+
+---
+
+> Built with ?? to help students crack placements ??
