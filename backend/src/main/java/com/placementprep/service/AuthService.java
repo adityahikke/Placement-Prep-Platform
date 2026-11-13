@@ -37,13 +37,14 @@ public class AuthService {
 
     @Transactional
     public AuthResponse register(RegisterRequest request) {
-        if (userRepository.existsByEmail(request.getEmail())) {
+        String email = request.getEmail().toLowerCase().trim();
+        if (userRepository.existsByEmailIgnoreCase(email)) {
             throw new BadRequestException("Error: Email is already in use!");
         }
 
         User user = User.builder()
                 .name(request.getName())
-                .email(request.getEmail().toLowerCase().trim())
+                .email(email)
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.ROLE_STUDENT)
                 .college(request.getCollege())
@@ -91,7 +92,7 @@ public class AuthService {
     public AuthResponse googleLogin(GoogleLoginRequest request) {
         GoogleTokenVerifier.GoogleUser googleUser = googleTokenVerifier.verify(request.getCredential());
 
-        User user = userRepository.findByEmail(googleUser.email())
+        User user = userRepository.findByEmailIgnoreCase(googleUser.email())
                 .map(existing -> linkGoogleAccount(existing, googleUser))
                 .orElseGet(() -> createGoogleUser(googleUser));
 

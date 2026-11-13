@@ -10,8 +10,7 @@
 [![Deployment - Render](https://img.shields.io/badge/Backend-Render-46E3B7.svg?style=flat&logo=render)](https://render.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-> 🚀 **Live Demo**: **[https://apticode-rho.vercel.app/login](https://apticode-rho.vercel.app/login)**  
-> Try the live application directly in your browser with the demo credentials below!
+> 🚀 **Live Demo**: **[https://apticode-rho.vercel.app/login](https://apticode-rho.vercel.app/login)**
 
 A modern, production-grade full-stack platform designed to help engineering students prepare effectively for campus placements, technical assessments, and software engineering interviews. 
 
@@ -26,9 +25,9 @@ The application is architected as a decoupled, modern cloud-native system:
 | Layer | Hosting Provider | Live URL / Endpoint | Description |
 |---|---|---|---|
 | **Frontend (Live Demo)** | [Vercel](https://vercel.com) | [apticode-rho.vercel.app/login](https://apticode-rho.vercel.app/login) | Production React 18 SPA with global edge delivery |
-| **Backend REST API** | [Render](https://render.com) | `https://placementprep-backend.onrender.com` | Dockerized Spring Boot 3 service with automatic zero-downtime deploys |
+| **Backend REST API** | [Render](https://render.com) | `https://placement-prep-platform-2.onrender.com` | Dockerized Spring Boot 3 service |
 | **Database** | [Supabase](https://supabase.com) | `aws-0-[region].pooler.supabase.com:6543` | Managed PostgreSQL with connection pooling & automated failover |
-| **API Documentation** | Swagger / OpenAPI 3 | `https://placementprep-backend.onrender.com/swagger-ui.html` | Interactive REST API testing interface |
+| **API Documentation** | Swagger / OpenAPI 3 | `https://placement-prep-platform-2.onrender.com/swagger-ui.html` | Interactive REST API testing interface |
 
 ```mermaid
 flowchart TD
@@ -149,14 +148,9 @@ The platform leverages JPA entities with automated schema evolution (`ddl-auto: 
 
 ---
 
-## 🔑 Default Seeded Credentials
+## 🔑 Accounts
 
-When connecting to an empty database, `DataInitializer` and `CurriculumSeeder` automatically populate default admin and student users, sample curriculum subjects, questions, and DSA problems:
-
-| Account Type | Email | Password | Accessible Features |
-|---|---|---|---|
-| **Administrator** | `admin@placementprep.com` | `admin123` | Admin Dashboard, Student Directory, Question Bank, Curriculum Editor |
-| **Student (Demo)** | `student@placementprep.com` | `student123` | Student Dashboard, Timed Tests, CS Modules, DSA Tracker, Analytics |
+New accounts can register as students. Create administrator accounts through a trusted administrative process; the application does not seed public default credentials.
 
 ---
 
@@ -201,13 +195,15 @@ You can deploy the Spring Boot backend on Render using the included multi-stage 
 | `SPRING_DATASOURCE_URL` | `jdbc:postgresql://aws-0-xx.pooler.supabase.com:6543/postgres?sslmode=require` | Supabase JDBC URL |
 | `SPRING_DATASOURCE_USERNAME` | `postgres.your_supabase_ref` | Supabase DB username |
 | `SPRING_DATASOURCE_PASSWORD` | `YourSupabasePassword` | Supabase DB password |
-| `JWT_SECRET` | `404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970` | 64+ char secret key |
+| `JWT_SECRET` | Unique random Base64 key (at least 32 decoded bytes) | Required JWT signing key; never commit it |
+| `CORS_ALLOWED_ORIGINS` | `https://apticode-rho.vercel.app` | Comma-separated trusted browser origins |
+| `DB_POOL_SIZE` | `5` | Per-instance maximum JDBC pool size; account for every Render instance |
 | `GOOGLE_CLIENT_ID` | `your-google-oauth-client-id.apps.googleusercontent.com` | Optional: For Google Sign-in |
 | `PORT` | `8080` | Internal application port |
 
 5. Under **Advanced**, configure the Health Check Path:
-   - **Health Check Path**: `/api/health`
-6. Click **Deploy Web Service**. Once deployed, Render will provide your public backend URL (e.g., `https://placementprep-backend.onrender.com`).
+   - **Health Check Path**: `/api/health` (checks database connectivity)
+6. Click **Deploy Web Service** and use the actual Render service URL in Vercel.
 
 > **Tip for Render Free Tier**: The `Dockerfile` includes JVM tuning flags (`-Xms256m -Xmx384m -XX:+UseG1GC`) to ensure smooth execution within the 512MB RAM free tier limit.
 
@@ -226,7 +222,7 @@ You can deploy the Spring Boot backend on Render using the included multi-stage 
 
 | Variable | Example Value | Description |
 |---|---|---|
-| `VITE_API_BASE_URL` | `https://placementprep-backend.onrender.com` | URL of your deployed Render backend (omit trailing slash) |
+| `VITE_API_BASE_URL` | `https://placement-prep-platform-2.onrender.com` | URL of your deployed Render backend (omit trailing slash) |
 | `VITE_GOOGLE_CLIENT_ID` | `your-client-id.apps.googleusercontent.com` | Google OAuth Web Client ID |
 
 5. Click **Deploy**. Vercel will build and host your frontend globally with automatic routing rewrites (`vercel.json` and `public/_redirects`).  
@@ -258,13 +254,13 @@ cd backend
 export SPRING_DATASOURCE_URL="jdbc:postgresql://localhost:5432/placementprep"
 export SPRING_DATASOURCE_USERNAME="postgres"
 export SPRING_DATASOURCE_PASSWORD="your_password"
-export JWT_SECRET="404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970"
+export JWT_SECRET="<generate-a-unique-base64-key-with-at-least-32-random-bytes>"
 
 # On Windows PowerShell:
 $env:SPRING_DATASOURCE_URL="jdbc:postgresql://localhost:5432/placementprep"
 $env:SPRING_DATASOURCE_USERNAME="postgres"
 $env:SPRING_DATASOURCE_PASSWORD="your_password"
-$env:JWT_SECRET="404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970"
+$env:JWT_SECRET="<generate-a-unique-base64-key-with-at-least-32-random-bytes>"
 
 # Run Spring Boot application
 mvn spring-boot:run

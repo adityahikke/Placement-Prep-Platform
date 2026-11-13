@@ -1,10 +1,13 @@
 import axiosClient from './axiosClient';
 
+// Render instances may need time to wake after an idle period.
+const AUTH_REQUEST_TIMEOUT_MS = 90000;
+
 export const authApi = {
-  login: (credentials) => axiosClient.post('/auth/login', credentials),
-  register: (userData) => axiosClient.post('/auth/register', userData),
-  googleLogin: (credential) => axiosClient.post('/auth/google', { credential }),
-  getCurrentUser: () => axiosClient.get('/auth/me'),
+  login: (credentials) => axiosClient.post('/auth/login', credentials, { timeout: AUTH_REQUEST_TIMEOUT_MS }),
+  register: (userData) => axiosClient.post('/auth/register', userData, { timeout: AUTH_REQUEST_TIMEOUT_MS }),
+  googleLogin: (credential) => axiosClient.post('/auth/google', { credential }, { timeout: AUTH_REQUEST_TIMEOUT_MS }),
+  getCurrentUser: () => axiosClient.get('/auth/me', { timeout: AUTH_REQUEST_TIMEOUT_MS }),
 };
 
 export const contentApi = {

@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,48 +20,21 @@ public class DataInitializer implements CommandLineRunner {
 
     private static final Logger logger = LoggerFactory.getLogger(DataInitializer.class);
 
-    private final UserRepository userRepository;
     private final SectionRepository sectionRepository;
     private final SubjectRepository subjectRepository;
     private final ChapterRepository chapterRepository;
     private final QuestionRepository questionRepository;
     private final DsaProblemRepository dsaProblemRepository;
-    private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
     public void run(String... args) {
-        if (userRepository.count() == 0) {
-            logger.info("Seeding initial users, sections, subjects, chapters, questions and DSA problems...");
-            seedUsers();
+        if (sectionRepository.count() == 0) {
+            logger.info("Seeding initial sections, subjects, chapters, questions and DSA problems...");
             seedCurriculum();
             seedDsaProblems();
             logger.info("Data initialization complete!");
         }
-    }
-
-    private void seedUsers() {
-        User admin = User.builder()
-                .name("PlacementPrep Admin")
-                .email("admin@placementprep.com")
-                .password(passwordEncoder.encode("admin123"))
-                .role(Role.ROLE_ADMIN)
-                .college("IIT Delhi")
-                .branch("Computer Science")
-                .graduationYear(2025)
-                .build();
-        userRepository.save(admin);
-
-        User student = User.builder()
-                .name("Alex Student")
-                .email("student@placementprep.com")
-                .password(passwordEncoder.encode("student123"))
-                .role(Role.ROLE_STUDENT)
-                .college("BITS Pilani")
-                .branch("Information Technology")
-                .graduationYear(2026)
-                .build();
-        userRepository.save(student);
     }
 
     private void seedCurriculum() {

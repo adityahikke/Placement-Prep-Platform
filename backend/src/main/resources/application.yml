@@ -10,6 +10,13 @@ spring:
     username: ${SPRING_DATASOURCE_USERNAME:${DATABASE_USERNAME:postgres}}
     password: ${SPRING_DATASOURCE_PASSWORD:${DATABASE_PASSWORD}}
     driver-class-name: ${DATABASE_DRIVER:org.postgresql.Driver}
+    hikari:
+      maximum-pool-size: ${DB_POOL_SIZE:5}
+      minimum-idle: ${DB_POOL_MIN_IDLE:1}
+      connection-timeout: ${DB_CONNECTION_TIMEOUT_MS:10000}
+      validation-timeout: 5000
+      idle-timeout: 300000
+      max-lifetime: 1500000
 
   jpa:
     hibernate:
@@ -33,8 +40,11 @@ spring:
 
 app:
   jwt:
-    secret: ${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970337336763979244226452948404D6351}
+    secret: ${JWT_SECRET}
     expiration-ms: 86400000
+
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173,https://apticode-rho.vercel.app}
 
   google:
     client-id: ${GOOGLE_CLIENT_ID:821144344369-52qf8tvtmf44l8ejmkdstoktco2bcqe8.apps.googleusercontent.com}

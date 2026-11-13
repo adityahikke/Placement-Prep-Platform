@@ -3,7 +3,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Button } from '../components/common/Button';
 import { GoogleSignInButton } from '../components/common/GoogleSignInButton';
-import { GraduationCap, Mail, Lock, AlertCircle, Sparkles } from 'lucide-react';
+import { GraduationCap, Mail, Lock, AlertCircle } from 'lucide-react';
 
 export const Login = () => {
   const [email, setEmail] = useState('');
@@ -28,11 +28,6 @@ export const Login = () => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleDemoFill = (demoEmail, demoPass) => {
-    setEmail(demoEmail);
-    setPassword(demoPass);
   };
 
   return (
@@ -119,28 +114,6 @@ export const Login = () => {
           {/* Google Sign-In */}
           <GoogleSignInButton onError={setError} text="signin_with" />
 
-          {/* Quick Demo Accounts */}
-          <div className="mt-6 pt-5 border-t border-slate-100 dark:border-slate-800">
-            <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400 text-center mb-3 flex items-center justify-center gap-1">
-              <Sparkles className="w-3 h-3 text-amber-500" /> Quick Demo Fill
-            </p>
-            <div className="grid grid-cols-2 gap-2">
-              <button
-                type="button"
-                onClick={() => handleDemoFill('student@placementprep.com', 'student123')}
-                className="py-1.5 px-2.5 rounded-lg text-xs font-medium bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:text-blue-600 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 transition-all"
-              >
-                Demo Student
-              </button>
-              <button
-                type="button"
-                onClick={() => handleDemoFill('admin@placementprep.com', 'admin123')}
-                className="py-1.5 px-2.5 rounded-lg text-xs font-medium bg-slate-100 dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 hover:text-indigo-600 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 transition-all"
-              >
-                Demo Admin
-              </button>
-            </div>
-          </div>
         </div>
 
         <p className="text-center text-xs text-slate-500 dark:text-slate-400 mt-6">
